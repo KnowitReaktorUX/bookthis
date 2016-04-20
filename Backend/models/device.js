@@ -18,12 +18,12 @@ const Schema = mongoose.Schema;
  */
 module.exports = mongoose.model('Device', new Schema({
 
-  id: {
+  _id: {
     type: String,
     default: ''
   },
 
-  name: {
+  model: {
     type: String,
     default: ''
   },

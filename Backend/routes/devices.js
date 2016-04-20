@@ -32,7 +32,7 @@ module.exports = {
   /**
    * POST /devices
    * create a new device
-   * id
+   * id (req)
    */
   createDevice: (req, res) => {
     if (!req.body.id) {
@@ -45,32 +45,24 @@ module.exports = {
 
     const device = new Device();
 
-    device.id = req.body.id;
+    device._id = req.body.id;
 
     device.save((err) => {
       if (err) {
         res.send(err);
+        return;
       }
 
-      Device.find({id: req.body.id}, (err, devices) => {
+      Device.findById(req.body.id, (err, device) => {
         if (err) {
           res.send(err);
-        }
-
-        const device = devices[0] ? devices[0] : false;
-
-        if (device === false) {
-          res.json({
-            status: 'error',
-            message: 'device not found in database.'
-          });
           return;
         }
 
         res.json({
           status: 'success',
           data: device
-        });
+        })
       });
     });
   },
@@ -95,17 +87,16 @@ module.exports = {
   /**
    * GET /devices/:id
    * get information about device
-   * id
+   * id (req)
    */
   getDevice: (req, res) => {
-    Device.find({id: req.params.id}, (err, devices) => {
+    Device.findById(req.params.id, (err, device) => {
       if (err) {
         res.send(err);
+        return;
       }
 
-      const device = devices[0] ? devices[0] : false;
-
-      if (device === false) {
+      if (!device) {
         res.json({
           status: 'error',
           message: 'device not found in database.'
@@ -116,24 +107,23 @@ module.exports = {
       res.json({
         status: 'success',
         data: device
-      });
+      })
     });
   },
 
   /**
    * PUT /devices/:id
    * updating information about device
-   * TODO make dynamics
+   * id (req), model
    */
   updateDevice: (req, res) => {
-    Device.find({id: req.params.id}, (err, devices) => {
+    Device.findById(req.params.id, (err, device) => {
       if (err) {
         res.send(err);
+        return;
       }
 
-      const device = devices[0] ? devices[0] : false;
-
-      if (device === false) {
+      if (!device) {
         res.json({
           status: 'error',
           message: 'device not found in database.'
@@ -141,35 +131,49 @@ module.exports = {
         return;
       }
 
-      device.name = req.body.name;
+      if (req.body.model) {
+        device.model = req.body.model;
+      }
 
       device.save((err) => {
         if (err) {
           res.send(err);
+          return;
         }
 
         res.json({
           status: 'success',
           data: device
-        });
-      });
+        })
+      })
     });
   },
 
   /**
    * DELETE /devices/:id
    * delete device from database
-   * id
+   * id (req)
    */
   deleteDevice: (req, res) => {
-    Device.remove({id: req.params.id}, (err, response) => {
+    Device.findById(req.params.id, (err, device) => {
       if (err) {
         res.send(err);
+        return;
       }
 
-      res.json({
-        status: 'success',
-        data: response
+      if (!device) {
+        res.json({
+          status: 'error',
+          message: 'device not found in database'
+        });
+        return;
+      }
+
+      device.remove(() => {
+        res.json({
+          status: 'success',
+          data: device
+        })
       });
     });
   },
@@ -177,17 +181,16 @@ module.exports = {
   /**
    * PUT /devices/:id/checkin
    * change device parameter checkedOut = false
-   * id
+   * id (req)
    */
   checkInDevice: (req, res) => {
-    Device.find({id: req.params.id}, (err, devices) => {
+    Device.findById(req.params.id, (err, device) => {
       if (err) {
         res.send(err);
+        return;
       }
 
-      const device = devices[0] ? devices[0] : false;
-
-      if (device === false) {
+      if (!device) {
         res.json({
           status: 'error',
           message: 'device not found in database.'
@@ -199,6 +202,7 @@ module.exports = {
       device.save((err) => {
         if (err) {
           res.send(err);
+          return;
         }
 
         res.json({
@@ -212,17 +216,16 @@ module.exports = {
   /**
    * PUT /devices/:id/checkout
    * change device parameter checkedOut = true
-   * id, checkedOutBy
+   * id (req), checkedOutBy (req)
    */
   checkOutDevice: (req, res) => {
-    Device.find({id: req.params.id}, (err, devices) => {
+    Device.findById(req.params.id, (err, device) => {
       if (err) {
         res.send(err);
+        return;
       }
 
-      const device = devices[0] ? devices[0] : false;
-
-      if (device === false) {
+      if (!device) {
         res.json({
           status: 'error',
           message: 'device not found in database.'
@@ -231,18 +234,20 @@ module.exports = {
       }
 
       if (!req.body.checkedOutBy) {
-        res.send({
+        res.json({
           status: 'error',
-          message: 'route need paramater checkedOutBy.'
+          message: 'route need body parameter checkedOutBy.'
         });
         return;
       }
 
       device.checkedOutBy = req.body.checkedOutBy;
       device.checkedOut = true;
+
       device.save((err) => {
         if (err) {
           res.send(err);
+          return;
         }
 
         res.json({
