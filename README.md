@@ -1,36 +1,35 @@
-# Bookthis / Application / React Native
+# Bookthis Application
 
-Mobile application for checking in/out devices in Knowit Reaktor Stockholm's
-Device Lab. The app is built with React Native, and uses MongoDB for data
-storage.
+Bookthis is a mobile application with the purpose of checking in or out devices
+from the Knowit Reaktor Stockholm’s device laboratory. The application is built
+with React Native technology. It communicates with an REST API build on NodeJS
+and uses MongoDB for data storage.
 
 ## 1 ) Concept
-<em>A great application is often focused; which in the context means that it's
-capable of solving a few well defined tasks really well. It's should also be
-pleasant to use and interact with.</em>
+_A great mobile application is often focused. This means that it is great at
+solving a few well defined tasks really well. These tasks should be solutions
+for problems that the application’s target group experience in one way or
+another. Furthermore, users expect better experience when using a native
+application than a web-based application. Thus, the application has to be
+visually great looking and be pleasant to interact with._
 
-In the case of the Bookthis application, we sought to make the devices from
-our company's Device Lab more available to our colleagues by creating a simple
-check-in/check-out system. In the past, we've used a more analogous system which
-in many cases has led to a number of problems:
+With the Bookthis application, we sought to make the devices from Knowit’s
+device laboratory more available to our colleagues by creating a simple
+check-in/check-out application that could also track who’s currently using a
+specific device. In the past, the process for completing these tasks has been
+more analogous, which in turn has led to a number of problems:
 
-<ul>
-  <li>
-    The process of lending a device has been very informal and vague.
-  </li>
-  <li>
-    Sometimes, when booking the lab, devices has been missing and there's been
-    no easy way to find who's checked out the device.
-  </li>
-  <li>
-    We've used a wiki to list our devices and the device specifications.
-    However, this wiki has gone mostly un-noticed.
-  </li>
-</ul>
+- The process has been very informal and vague.
 
-These are the core problems that the Bookthis application targets. Each device
-in the lab will have the application installed. A User will be able to
-check-in/check-out the device by use of the application. The application will
-also have a device list where the user can find information about different
-devices, if they are checked-in or checked-out. If a device is checked-out, it
-will also list who's checked-out the device so it can be easily found.
+- Sometimes a project has booked the device lab for device testing just to find
+  some devices missing. At this point there’s been no easy way to find out who’s
+  currently using the missing devices.
+
+- We’ve used a wiki to list out devices and their specifications. However, this
+  wiki has gone mostly un-noticed.
+
+These three problems are the core problems that the Bookthis application
+targets. Each device in the laboratory will have the application installed. Any
+user using the device can access the application to check-in/check-out the
+device. From the application, the user can also find information about our
+devices and who’s currently using a specific device.
