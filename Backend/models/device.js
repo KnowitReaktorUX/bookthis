@@ -36,6 +36,49 @@ module.exports = mongoose.model('Device', new Schema({
   checkedOutBy: {
     type: String,
     default: ''
+  },
+
+  spec: {
+
+    os: {
+      type: String,
+      default: ''
+    },
+
+    type: { // 0 = mobile, 1 = tablet, 2 = desktop
+      type: Number,
+      default: 0
+    },
+
+    screen: {
+
+      portrait: {
+        type: String,
+        default: ''
+      },
+
+      landscape: {
+        type: String,
+        default: ''
+      },
+
+      dpi: {
+        type: Number,
+        default: 0
+      },
+
+      dppx: {
+        type: Number,
+        default: 0
+      }
+
+    },
+
+    description: {
+      type: String,
+      default: ''
+    }
+
   }
 
 }));

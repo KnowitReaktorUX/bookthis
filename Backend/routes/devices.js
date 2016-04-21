@@ -145,8 +145,23 @@ module.exports = {
         return;
       }
 
-      if (req.body.model) {
-        device.model = req.body.model;
+      if (req.body.model) {device.model = req.body.model;}
+
+      if (req.body.spec) {
+        let spec = req.body.spec;
+
+        if (spec.os) {device.spec.os = spec.os;}
+        if (spec.type) {device.spec.type = spec.type;}
+        if (spec.description) {device.spec.description = spec.description;}
+      }
+
+      if (req.body.spec.screen) {
+        let screen = req.body.spec.screen;
+
+        if (screen.portrait) {device.spec.screen.portrait = screen.portrait;}
+        if (screen.landscape) {device.spec.screen.landscape = screen.landscape;}
+        if (screen.dpi) {device.spec.screen.dpi = screen.dpi;}
+        if (screen.dppx) {device.spec.screen.dppx = screen.dppx;}
       }
 
       device.save((err) => {
