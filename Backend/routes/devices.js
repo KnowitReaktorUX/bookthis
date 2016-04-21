@@ -24,6 +24,38 @@ mongoose.connect(
   `mongodb://${dbUser}:${dbPassword}@ds060478.mlab.com:60478/bookthis`);
 
 /**
+ * helpers
+ * -----------------------------------------------------------------------------
+ */
+const errorMessages = [
+  'device need body parameter id to be created.',
+  'device not found in database.',
+  'route need body parameter checkedOutBy.'
+];
+
+const errorHandler = (res, messageId, customMessage) => {
+  let message;
+
+  if (messageId) {
+    message = errorMessages[messageId];
+  } else {
+    message = customMessage;
+  }
+
+  res.json({
+    status: 'error',
+    message: message
+  });
+};
+
+const successHandler = (res, data) => {
+  res.json({
+    status: 'success',
+    data: data
+  });
+};
+
+/**
  * route handlers
  * -----------------------------------------------------------------------------
  */
@@ -36,10 +68,7 @@ module.exports = {
    */
   createDevice: (req, res) => {
     if (!req.body.id) {
-      res.send({
-        status: 'error',
-        message: 'device need parameter id to be created.'
-      });
+      errorHandler(res, 0);
       return;
     }
 
@@ -59,10 +88,7 @@ module.exports = {
           return;
         }
 
-        res.json({
-          status: 'success',
-          data: device
-        })
+        successHandler(res, device);
       });
     });
   },
@@ -77,10 +103,7 @@ module.exports = {
         res.send(err);
       }
 
-      res.json({
-        status: 'success',
-        data: devices
-      });
+      successHandler(res, devices);
     });
   },
 
@@ -97,17 +120,11 @@ module.exports = {
       }
 
       if (!device) {
-        res.json({
-          status: 'error',
-          message: 'device not found in database.'
-        });
+        errorHandler(res, 1);
         return;
       }
 
-      res.json({
-        status: 'success',
-        data: device
-      })
+      successHandler(res, device);
     });
   },
 
@@ -124,10 +141,7 @@ module.exports = {
       }
 
       if (!device) {
-        res.json({
-          status: 'error',
-          message: 'device not found in database.'
-        });
+        errorHandler(res, 1);
         return;
       }
 
@@ -141,10 +155,7 @@ module.exports = {
           return;
         }
 
-        res.json({
-          status: 'success',
-          data: device
-        })
+        successHandler(res, device);
       })
     });
   },
@@ -162,18 +173,12 @@ module.exports = {
       }
 
       if (!device) {
-        res.json({
-          status: 'error',
-          message: 'device not found in database'
-        });
+        errorHandler(res, 1);
         return;
       }
 
       device.remove(() => {
-        res.json({
-          status: 'success',
-          data: device
-        })
+        successHandler(res, device);
       });
     });
   },
@@ -191,10 +196,7 @@ module.exports = {
       }
 
       if (!device) {
-        res.json({
-          status: 'error',
-          message: 'device not found in database.'
-        });
+        errorHandler(res, 1);
         return;
       }
 
@@ -205,10 +207,7 @@ module.exports = {
           return;
         }
 
-        res.json({
-          status: 'success',
-          data: device
-        });
+        successHandler(res, device);
       });
     });
   },
@@ -226,18 +225,12 @@ module.exports = {
       }
 
       if (!device) {
-        res.json({
-          status: 'error',
-          message: 'device not found in database.'
-        });
+        errorHandler(res, 1);
         return;
       }
 
       if (!req.body.checkedOutBy) {
-        res.json({
-          status: 'error',
-          message: 'route need body parameter checkedOutBy.'
-        });
+        errorHandler(res, 2);
         return;
       }
 
@@ -250,10 +243,7 @@ module.exports = {
           return;
         }
 
-        res.json({
-          status: 'success',
-          data: device
-        });
+        successHandler(res, device);
       });
     });
   }
